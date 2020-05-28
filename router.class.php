@@ -2,27 +2,34 @@
 
 class Router {
     private $routes;
-
+    
     function __construct() {
+        // url path => internal route
         $this->routes = [
-            "/" => "Home"
+            "tasks" => "home",
+            "home/([-_a-z0-9]+)" => "home/main/$1"
         ];
     }
 
     function start() {
-        $path = $_SERVER["REQUEST_URI"];
+        $url = trim($_SERVER["REQUEST_URI"], "/");
 
-        foreach ($this->routes as $route => $controller) {
-            if ($path === $route) {
-                $this->getController($controller);
+        foreach ($this->routes as $route => $internal) {
+            if (preg_match("~$route~", $url)) {
+                $internalParts = explode("/", preg_replace("~$route~", $internal, $url));
+                
+                $controller = ucfirst(array_shift($internalParts));
+                $action = array_shift($internalParts);
+                $params = $internalParts;
+
+                $this->getController($controller, $action, $params);
             }
         }
 
-        header("HTTP/1.0 404 Not Found");
         return;
     }
 
-    function getController($controller) {
+    function getController($controller, $action, $params) {
         $controllerName = $controller."Controller";
         $controllerFile = ROOT."/controllers/".$controllerName.".php";
 
@@ -30,11 +37,12 @@ class Router {
             include($controllerFile);
         }
 
-        if (!is_callable(array($controllerName, 'action'))) {
+        if (!is_callable(array($controllerName, $action))) {
             header("HTTP/1.0 404 Not Found");
             return;
         }
 
-        call_user_func_array(array($controllerName, 'action'), '');
+        include(ROOT."/views/View.php");
+        call_user_func_array(array($controllerName, $action), $params);
     }
 }
