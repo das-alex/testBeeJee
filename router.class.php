@@ -6,8 +6,10 @@ class Router {
     function __construct() {
         // url path => internal route
         $this->routes = [
-            "tasks" => "home",
-            "home/([-_a-z0-9]+)" => "home/main/$1"
+            "login" => "login/main",
+            "tasks/([-_0-9]+)" => "home/main/$1",
+            "tasks/add" => "home/add",
+            "tasks/sort/([-_a-z]+)" => "home/sort/$1"
         ];
     }
 

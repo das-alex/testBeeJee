@@ -1,0 +1,23 @@
+create table users (
+  id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_name varchar(30),
+  password varchar(30),
+  email varchar(30),
+  isAdmin int(1)
+);
+
+create table tasks (
+  id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id int(6),
+  task varchar(200),
+  status int(1)
+);
+
+insert into users (user_name, password, email, isAdmin) 
+values ('admin', '123', 'test@test.com', 1);
+
+insert into tasks (user_id, task, status) 
+values (1, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus, dolores error sit molestiae illum perspiciatis.', 0);
+
+ALTER TABLE tasks
+MODIFY COLUMN task varchar(200);

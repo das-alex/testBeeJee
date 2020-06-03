@@ -4,3 +4,19 @@
     border-radius: 8px;
     box-shadow: 0 0 3px 0 #cacaca;
 }
+
+.tasks_list {
+    width: 100%;
+}
+
+.tasks_alerts {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+
+    z-index: 9999;
+}
+
+.tasks_alerts .alert {
+    display: none;
+}
