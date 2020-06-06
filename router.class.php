@@ -6,10 +6,13 @@ class Router {
     function __construct() {
         // url path => internal route
         $this->routes = [
+            "login/check" => "login/check",
+            "logout" => "login/logout",
             "login" => "login/main",
             "tasks/([-_0-9]+)" => "home/main/$1",
             "tasks/add" => "home/add",
-            "tasks/sort/([-_a-z]+)" => "home/sort/$1"
+            "tasks/sort/([-_a-z]+)" => "home/sort/$1",
+            "tasks/update" => "home/update"
         ];
     }
 
@@ -36,7 +39,7 @@ class Router {
         $controllerFile = ROOT."/controllers/".$controllerName.".php";
 
         if (file_exists($controllerFile)) {
-            include($controllerFile);
+            include_once($controllerFile);
         }
 
         if (!is_callable(array($controllerName, $action))) {
@@ -44,7 +47,7 @@ class Router {
             return;
         }
 
-        include(ROOT."/views/View.php");
+        include_once(ROOT."/views/View.php");
         call_user_func_array(array($controllerName, $action), $params);
     }
 }

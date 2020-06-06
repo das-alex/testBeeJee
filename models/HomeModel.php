@@ -60,9 +60,9 @@ class HomeModel {
     function addTask($userName, $email, $task) {
         $userId = $this->getUserId($userName, $email);
         
-        if (!$userId) {
+        if (empty($userId["id"])) {
             $isUserAdded = $this->addUser($userName, $email);
-            // $userId = $this-
+            $userId = $this->getUserId($userName, $email);
         }
         
         $addTask = "insert into tasks (user_id, task, status) values (:userId, :task, 0)";
@@ -72,11 +72,21 @@ class HomeModel {
             ":task" => $task
         ));
 
-        if (!$isAdded) {
+        return;
+    }
 
-        }
+    function updateTask($dataId, $task, $isDone) {
+        // isDone: 0 - ничего, 1 - только выполнено, 2 - только отредактировано, 3 - вместе
+        $updateTask = $this->pdo->prepare("update tasks set task=:task, status=:isDone where tasks.id=:dataId");
+        $isUpdated = $updateTask->execute(array(
+            ":task" => $task,
+            ":isDone" => intval($isDone),
+            ":dataId" => intval($dataId)
+        ));
+        
+        // some verification
 
-        $sql = "insert into tasks (user_id, task, status) values ()";
+        return;
     }
 
     function getUserId($userName, $email) {

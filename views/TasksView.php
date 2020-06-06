@@ -3,14 +3,20 @@
     <div class="d-flex justify-content-between align-items-center tasks_header mb-3">
         <h4>Задачи</h4>
         <div>
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addTask" data-whatever="@mdo">Авторизация</button>
-            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addTask" data-whatever="@mdo">Добавить задачу</button>
+            <?if(empty($_SESSION["isAdmin"])):?>
+                <a href="/login" class="btn btn-primary btn-sm">Авторизация</a>
+            <?endif?>
+            <?if($_SESSION["isAdmin"]):?>
+                <a href="/logout" class="btn btn-secondary btn-sm">Выйти</a>
+            <?endif?>
+            <button id="addTaskOpenModal" type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addTask">
+                Добавить задачу
+            </button>
         </div>
     </div>
     <!-- Sorting -->
     <div id="filtersGroup" class="d-flex justify-content-between align-items-center tasks_sort mb-3">
         <div class="btn-group btn-group-sm" role="group" aria-label="Button group with nested dropdown">
-            <? session_start(); ?>
             <button
                 id="sortByName"
                 type="button"
@@ -57,14 +63,31 @@
     <div class="d-flex tasks_body mb-3">
         <ul class="list-group tasks_list">
             <?foreach($tasks as $task):?>
-                <li class="list-group-item tasks_item <?=$task["status"] != 0 ? 'list-group-item-success' : ''?>">
+                <li class="list-group-item tasks_item 
+                    <?=($task["status"] == 1 || $task["status"] == 3) ? 'list-group-item-success' : ''?>
+                ">
                     <div class="tasks_item_card">
                         <p class="tasks_item_text">
                             <?=$task["task"]?>
                         </p>
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="badge badge-info tasks_item_name"><?=$task["user_name"]?></span>
+                            <span class="badge badge-light tasks_item_email"><?=$task["email"]?></span>
+                        </div>
                         <div class="d-flex justify-content-between align-items-center">
-                            <span class="badge badge-info"><?=$task["user_name"]?></span>
-                            <span class="badge badge-light"><?=$task["email"]?></span>
+                            <?if($_SESSION["isAdmin"]):?>
+                                <a
+                                    href="#"
+                                    data-id="<?=$task["id"]?>"
+                                    data-toggle="modal"
+                                    data-target="#addTask"
+                                    class="align-self-end badge badge-info stretched-link editTask">
+                                    Редактировать
+                                </a>
+                            <?endif?>
+                            <?if($task["status"] == 2 || $task["status"] == 3):?>
+                                <span class="badge badge-light">отредактировано администратором</span>
+                            <?endif?>
                         </div>
                     </div>
                 </li>
@@ -107,27 +130,28 @@
                 <form id="add_new_task_form" method="post" action="/tasks/add">
                     <div class="form-group">
                         <label for="name" class="col-form-label">Имя пользователя:</label>
-                        <input type="text" class="form-control" id="name">
+                        <input type="text" class="form-control" id="name" name="name">
                     </div>
                     <div class="form-group">
                         <label for="email" class="col-form-label">Email:</label>
-                        <input type="email" class="form-control" id="email">
+                        <input type="email" class="form-control" id="email" name="email">
                     </div>
                     <div class="form-group">
                         <label for="task" class="col-form-label">Задача:</label>
-                        <textarea class="form-control" id="task"></textarea>
+                        <textarea class="form-control" id="task" name="task"></textarea>
                     </div>
+                    <?if($_SESSION["isAdmin"]):?>
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="taskDone" name="taskDone">
+                            <label class="form-check-label" for="taskDone">Выполнено</label>
+                        </div>
+                    <?endif?>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button id="addTaskBtn" type="button" class="btn btn-primary">Добавить задачу</button>
+                <button id="addTaskBtn" type="button" class="btn btn-primary">Сохранить</button>
             </div>
         </div>
     </div>
-</div>
-<!-- Notification -->
-<div class="tasks_alerts">
-    <div class="alert alert-success" role="alert"></div>
-    <div class="alert alert-danger" role="alert"></div>
 </div>

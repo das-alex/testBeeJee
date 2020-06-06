@@ -21,3 +21,5 @@ values (1, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus, 
 
 ALTER TABLE tasks
 MODIFY COLUMN task varchar(200);
+
+$2y$10$TlH3bY3hHpFhVTzRZB6ecOYOK9bKgtLK85KafkpB/WH7akTy1Jjem

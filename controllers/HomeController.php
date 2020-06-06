@@ -34,6 +34,15 @@ class HomeController {
         return;
     }
 
+    function update() {
+        $dataId = filter_input(INPUT_POST, 'dataId', FILTER_VALIDATE_INT);
+        $task = filter_input(INPUT_POST, 'task', FILTER_SANITIZE_SPECIAL_CHARS);
+        $isDone = filter_input(INPUT_POST, 'isDone', FILTER_VALIDATE_INT);
+
+        $model = new HomeModel();
+        $model->updateTask($dataId, $task, $isDone);
+    }
+
     function sort($sortBy) {
         $field = filter_input(INPUT_GET, 'field', FILTER_SANITIZE_SPECIAL_CHARS);
         $type = filter_input(INPUT_GET, 'type', FILTER_SANITIZE_SPECIAL_CHARS);

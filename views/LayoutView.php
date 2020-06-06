@@ -8,8 +8,13 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 </head>
 <body>
-    <div class="container-fluid pt-4">
+    <div class="d-flex container-fluid pt-4">
         <?=$content?>
+    </div>
+    <!-- Notification -->
+    <div class="tasks_alerts">
+        <div class="alert alert-success" role="alert"></div>
+        <div class="alert alert-danger" role="alert"></div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
