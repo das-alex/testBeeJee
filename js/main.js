@@ -86,7 +86,7 @@ if (addTaskBtn) {
 
         if (isTaskEdited.openToEdit) {
             path = '/tasks/update';
-            formData.append('taskDone', +addTaskForm.taskDone.checked + (isTaskEdited.changed ? 2 : 0));
+            formData.append('isDone', +addTaskForm.taskDone.checked + (isTaskEdited.changed ? 2 : 0));
             formData.append('dataId', isTaskEdited.dataId);
         } else {
             formData.append('name', addTaskForm.name.value);
@@ -99,6 +99,8 @@ if (addTaskBtn) {
                 alert.success('Запись успешно сохранена');
             } else if (data.status === 400) {
                 alert.danger('Не все поля заполнены или введён неправильный email');
+            } else if (data.status === 401) {
+                alert.danger('Нет прав');
             }
         });
     });

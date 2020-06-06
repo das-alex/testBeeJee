@@ -77,6 +77,13 @@ class HomeModel {
 
     function updateTask($dataId, $task, $isDone) {
         // isDone: 0 - ничего, 1 - только выполнено, 2 - только отредактировано, 3 - вместе
+        session_start();
+
+        if (empty($_SESSION["isAdmin"])) {
+            http_response_code(401);
+            return;
+        }
+
         $updateTask = $this->pdo->prepare("update tasks set task=:task, status=:isDone where tasks.id=:dataId");
         $isUpdated = $updateTask->execute(array(
             ":task" => $task,
